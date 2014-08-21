@@ -1,0 +1,48 @@
+<apex:page extensions="JqueryTestController" standardController="Test_Object__c">
+    <!-- Begin Default Content REMOVE THIS -->
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+                        
+        });
+        
+        function onKeyPress(element) {
+            if(isValidInput(event.keyCode) == true) {
+            	calcMultiply();
+            }
+            else {		    
+            	alert("Please enter a valid input");
+            	clearInputBox(element);
+           	}
+        }
+        
+        function clearInputBox(element) {
+        	$(element).val('');
+        }
+        
+        function isBothInputGiven() {
+            
+        }
+        
+        function isValidInput(pKeyCode) {
+            return(pKeyCode == 8 || (pKeyCode >= 48 && pKeyCode <= 57) && pKeyCode != 32);
+        }
+        
+        
+    </script>
+    
+    <apex:form >
+        <apex:pageBlock title="New Step" >
+            <apex:pageBlockSection title="Tested by Saket" columns="2">
+                <div><apex:outputLabel value="enter number 1:" /><apex:inputText id="txtNumber1" onkeyup="onKeyPress(this);" /></div>
+                <div><apex:outputLabel value="enter number 2:" /><apex:inputText id="txtNumber2" onkeyup="onKeyPress(this);" /></div>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Calculate"/>
+            </apex:pageBlockButtons>
+            <apex:inputfield value="{!Test_Object__c.Amount__c}" id="resultBox" />
+        </apex:pageBlock>
+    </apex:form>
+    <!-- End Default Content REMOVE THIS -->
+</apex:page>

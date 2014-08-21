@@ -1,0 +1,61 @@
+<apex:page controller="QueryBuilderController">
+<!-- Begin Default Content REMOVE THIS -->
+    <apex:form >    
+        <apex:pagemessages ></apex:pagemessages>
+        <apex:actionFunction name="refreshFields" rerender="secondList" status="counterStatus">
+            <apex:param name="FirstParam" assignTo="{!selectedObject}" value="" />
+        </apex:actionFunction>
+    
+        <apex:pageBlock title="Dynamic Query Builder" id="mainBlock">
+            
+            <apex:outputLabel style="font-weight:800" value="Select Object: "></apex:outputLabel>
+            <apex:selectList value="{!selectedObject}" size="1" multiselect="false" onchange="refreshFields(this.value)">
+                <apex:selectOptions value="{!AllObjectsList}">         
+                </apex:selectOptions>
+                 <apex:actionStatus id="counterStatus" >
+                    <apex:facet name="start" >
+                        <apex:image url="{!$Resource.Query_Builder_Loading}" height="50" width="50" alt="Querying..." />               
+                    </apex:facet>
+                </apex:actionStatus>  
+            </apex:selectList><br/>
+        
+            <c:MultiselectPicklist id="secondList" leftLabel="Available Fields"
+                leftOptions="{!allFields}"
+                rightLabel="Selected Fields"
+                rightOptions="{!queryFields}"
+                size="14"
+                width="150px">
+              
+            </c:MultiselectPicklist>
+            
+            <br/><br/>    
+            <apex:outputLabel style="font-weight:800" value="Maximum # of records to display: " />
+            <apex:SelectList value="{!noRecords}" size="1" multiselect="false">
+                <apex:selectOptions value="{!lstRecordNumbers}" />
+            </apex:SelectList>
+                       
+            <apex:SelectRadio value="{!sortOrder}">
+                <apex:selectOptions value="{!lstSortOrder}" />
+            </apex:SelectRadio>
+            
+            <center><apex:commandButton value="Execute query" action="{!searchQuery}"/></center>
+        </apex:pageBlock>
+        
+        <apex:pageBlock title="Results" >
+            <apex:outputLabel style="font-weight:800" value="SOQL Query: "></apex:outputLabel>
+            <apex:inputTextArea value="{!queryString}" id="resultQuery" cols="100" rows="3"/>
+            <br/><br/>
+        
+            <apex:outputLabel style="font-weight:800" value="Query Results: "></apex:outputLabel>
+            <apex:pageBlockTable value="{!queryResult}" var="res" >
+                <apex:repeat value="{!queryFields}" var="field" >
+                    <apex:column headervalue="fieldName" >
+                        <apex:outputLink value="https://ap1.salesforce.com/{!res.Id}" target="_blank">{!res[field.value]}</apex:outputLink>
+                    </apex:column>
+                </apex:repeat>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+    </apex:form>
+    
+</apex:page>

@@ -1,0 +1,75 @@
+<apex:page sidebar="false" doctype="html-5.0" controller="ListPageController">
+<!-- List Page for Accounts
+Author: Saket Jo	Date: 21/08/14
+-->
+	<style>
+		.popupBackground {
+			background-color:black;
+			opacity:0.4;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			position: absolute;
+			
+			cursor: wait;
+		}
+		
+		.popupPanel {
+			background-color: transparent;
+			opacity:1.0;
+			width: 80px;
+			height: 80px;
+			left: 50%;
+			top: 50%;
+			
+			position: fixed;
+		}
+		
+		.btnPlusList {
+			height:20px;
+			width:20px;
+		}
+	</style>
+
+	<apex:pageMessages id="errorMessages"/>
+	
+	<apex:actionStatus id="loadingStatus" stopText="" >
+		<apex:facet name="start" >
+			<div>
+				<div class="popupBackground">
+					<div class="popupPanel">
+						<img src="{!$Resource.List_Page_Loading}"/>
+					</div>
+				</div>
+			</div>
+		</apex:facet>
+	</apex:actionStatus>
+	
+	<apex:form >
+		<apex:pageBlock id="listBlock" >
+			<apex:pageBlockTable id="listBlockTable" value="{!lstAccount}" var="item">
+			
+				<apex:column style="width:36px">
+	    			<apex:facet name="header"><input type="checkbox" id="checkAllBox" /></apex:facet>
+	    			<apex:inputCheckbox value="{!item.selectBox}" />
+				</apex:column>
+				
+				<apex:column style="width:100px">
+					<apex:facet name="header">Action</apex:facet>
+					<apex:outputLink value="/{!item.acc.Id}/e?retURL=/apex/List_Page">Edit </apex:outputLink>&nbsp;&nbsp;|&nbsp; 
+					<apex:commandLink action="{!deleteRecord}" rerender="listBlockTable, errorMessages" value="Del" status="loadingStatus">
+						<apex:param name="deleteRecId" assignTo="{!deleteRecId}" value="{!item.acc.Id}" />
+					</apex:commandLink>
+					&nbsp;|&nbsp; <img src="{!$Resource.green_plus}" class="btnPlusList"/>
+				</apex:column>
+				
+				<apex:column value="{!item.acc.Name}" />
+				<apex:column value="{!item.acc.Site}" />
+				<apex:column value="{!item.acc.BillingState}" />
+				<apex:column value="{!item.acc.Phone}" />
+				<apex:column value="{!item.acc.Type}" />
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

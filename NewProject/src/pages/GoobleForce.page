@@ -1,0 +1,95 @@
+<apex:page tabStyle="Account" showHeader="true" standardStylesheets="true" sidebar="false" controller="goobleController">
+<!-- Begin Default Content REMOVE THIS -->   
+		
+	<style type="text/css">
+		.title {
+			color: #3083A3;
+			text-decoration: none;
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-size: 20px;
+			margin-left: 275px;
+		}
+		
+		.link {
+			color: #0052FF;
+			text-decoration: none;
+			font-size: 14px;
+			margin-left: 300px;
+		}
+		
+		.histlink {
+			color: #0052FF;
+			text-decoration: none;
+			font-size: 14px;
+		}
+		
+		.info {
+			font: 12px Tahoma, Geneva, sans-serif;
+			margin-left: 300px;
+		}
+		
+		.history{
+			color: #0099cc;
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			text-decoration: none;
+			font-size: 20px;
+		}
+	</style>
+	 
+    <apex:sectionHeader title="GoobleForce.com" subtitle="Searching simplified..."/>
+    <center><img src="{!$Resource.GoobleForce_logo}" height="166" width="400" alt="GoobleLogo"></img></center>
+    
+    <apex:form >
+    	
+        <center><br/><br/><br/>
+            <apex:tabPanel height="200" width="768">
+            
+                <apex:tab label="Search" name="tbSearch" id="tbSearch">
+                    <br/><br/><br/><br/>
+                    <center><apex:inputText value="{!searchQuery}" size="70"/>
+                    <br/><apex:commandButton image="{!$Resource.Search_Button}" action="{!searchForQuery}" rerender="resultsPanel" status="searching"/></center>
+                </apex:tab>
+                
+                <apex:tab label="History" name="tbHistory" id="tbHistory" onTabEnter="{!fetchHistory}" >
+                	<apex:outputLabel value="Search History" styleClass="history" /><br/>
+                	<apex:outputPanel id="historyPanel">
+        				<apex:repeat value="{!lstHistory}" var="hst">
+        				<apex:outputpanel >
+        					<apex:commandLink action="{!queryDetails}" rerender="histOutput" status="searching">
+        						<apex:outputText styleClass="histlink" value="{!hst.Query_Text__c}" /><br/>
+        						<apex:param name="newParam" value="{!hst.Id}" assignTo="{!hId}" />
+        					</apex:commandLink>        						
+        				</apex:outputpanel>
+        				</apex:repeat>
+        			</apex:outputPanel>
+                </apex:tab>
+                
+            </apex:tabPanel>
+            
+            <apex:actionStatus id="searching" >
+            	<apex:facet name="start" >
+                	<apex:image url="{!$Resource.Query_Builder_Loading}" height="50" width="50" alt="Querying..." />               
+                </apex:facet>
+            </apex:actionStatus>
+            
+        </center><br/><br/>
+            
+        <apex:outputPanel id="resultsPanel">
+        	<apex:repeat value="{!lstResults}" var="res">
+	            <apex:outputLink value="{!res.link}" style="text-decoration: none" target="_blank"><apex:outputText value="{!res.title}" styleClass="title"/></apex:outputLink><br/>
+	            <apex:outputLink value="{!res.link}" styleClass="link" target="_blank">{!res.link}</apex:outputLink><br/>
+	            <apex:outputText value="{!res.description}" styleClass="info" /><br/><br/>
+	        </apex:repeat>
+        </apex:outputPanel>
+        
+        <apex:outputPanel id="histOutput">
+        	<apex:repeat value="{!lstHistResults}" var="res">
+	            <apex:outputLink value="{!res.link}" style="text-decoration: none" target="_blank"><apex:outputText value="{!res.title}" styleClass="title"/></apex:outputLink><br/>
+	            <apex:outputLink value="{!res.link}" styleClass="link" target="_blank">{!res.link}</apex:outputLink><br/>
+	            <apex:outputText value="{!res.description}" styleClass="info" /><br/><br/>
+	        </apex:repeat>
+        </apex:outputPanel>
+        
+    </apex:form>
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

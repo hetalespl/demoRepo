@@ -1,0 +1,11 @@
+<apex:page controller="PdfController" renderAs="pdf">  
+	<apex:form >
+		<apex:outputPanel id="resultsPanel">
+        	<apex:repeat value="{!lstResults}" var="res">
+	            <apex:outputLink value="{!res.link}" style="text-decoration: none" target="_blank"><apex:outputText value="{!res.title}" /></apex:outputLink><br/>
+	            <apex:outputLink value="{!res.link}" target="_blank">{!res.link}</apex:outputLink><br/>
+	            <apex:outputText value="{!res.description}" /><br/><br/>
+	        </apex:repeat>
+        </apex:outputPanel>
+	</apex:form>
+</apex:page>
